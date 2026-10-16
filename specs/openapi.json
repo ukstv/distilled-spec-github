@@ -45951,6 +45951,9 @@
           },
           {
             "$ref": "#/components/parameters/rule-suite-id"
+          },
+          {
+            "$ref": "#/components/parameters/include-metadata"
           }
         ],
         "responses": {
@@ -84715,6 +84718,9 @@
           },
           {
             "$ref": "#/components/parameters/rule-suite-id"
+          },
+          {
+            "$ref": "#/components/parameters/include-metadata"
           }
         ],
         "responses": {
@@ -86659,7 +86665,7 @@
     "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks": {
       "post": {
         "summary": "Create a temporary private fork",
-        "description": "Create a temporary private fork to collaborate on fixing a security vulnerability in your repository.\n\n> [!NOTE]\n> Forking a repository happens asynchronously. You may have to wait up to 5 minutes before you can access the fork.",
+        "description": "Create a temporary private fork to collaborate on fixing a security vulnerability in a repository.\n\nRepository administrators, organization owners, and security managers can create a temporary private fork. The original reporter of a privately reported vulnerability can also create one while they remain a collaborator on the security advisory.\n\n> [!NOTE]\n> Forking a repository happens asynchronously. You may have to wait up to 5 minutes before you can access the fork.",
         "tags": [
           "security-advisories"
         ],
@@ -149414,6 +149420,28 @@
                   "type": "string",
                   "description": "The type of rule."
                 },
+                "metadata": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/rule-suite-pull-request"
+                    },
+                    {
+                      "$ref": "#/components/schemas/rule-suite-required-status-checks"
+                    }
+                  ],
+                  "discriminator": {
+                    "propertyName": "rule_type",
+                    "mapping": {
+                      "pull_request": "#/components/schemas/rule-suite-pull-request",
+                      "required_status_checks": "#/components/schemas/rule-suite-required-status-checks"
+                    }
+                  },
+                  "description": "Additional metadata about the rule evaluation."
+                },
                 "details": {
                   "type": [
                     "string",
@@ -169408,7 +169436,7 @@
           },
           "start_private_fork": {
             "type": "boolean",
-            "description": "Whether to create a temporary private fork of the repository to collaborate on a fix.",
+            "description": "Whether to create a temporary private fork of the repository to collaborate on a fix. The fork is created only if you are permitted to create one; otherwise, this parameter is ignored and the report is still created.",
             "default": false
           }
         },
@@ -361857,6 +361885,16 @@
         "required": true,
         "schema": {
           "type": "integer"
+        }
+      },
+      "include-metadata": {
+        "name": "include_metadata",
+        "description": "When set to `true`, the response will include additional metadata for pull request and required status check rule evaluation.\nResults are capped at 50 entries.",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "boolean",
+          "default": false
         }
       },
       "secret-scanning-alert-state": {
