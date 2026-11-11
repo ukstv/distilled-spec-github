@@ -47857,7 +47857,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/organization-create-issue-type"
+                "$ref": "#/components/schemas/issue-type-request"
               },
               "examples": {
                 "default": {
@@ -47928,7 +47928,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/organization-update-issue-type"
+                "$ref": "#/components/schemas/issue-type-request"
               },
               "examples": {
                 "default": {
@@ -54346,7 +54346,7 @@
                   },
                   "use_squash_pr_title_as_default": {
                     "type": "boolean",
-                    "description": "Either `true` to allow squash-merge commits to use pull request title, or `false` to use commit message. **This property is closing down. Please use `squash_merge_commit_title` instead.",
+                    "description": "Either `true` to allow squash-merge commits to use pull request title, or `false` to use commit message. **This property is closing down. Please use `squash_merge_commit_title` instead.**",
                     "default": false,
                     "deprecated": true
                   },
@@ -58469,7 +58469,7 @@
                   },
                   "use_squash_pr_title_as_default": {
                     "type": "boolean",
-                    "description": "Either `true` to allow squash-merge commits to use pull request title, or `false` to use commit message. **This property is closing down. Please use `squash_merge_commit_title` instead.",
+                    "description": "Either `true` to allow squash-merge commits to use pull request title, or `false` to use commit message. **This property is closing down. Please use `squash_merge_commit_title` instead.**",
                     "default": false,
                     "deprecated": true
                   },
@@ -105086,6 +105086,212 @@
           "enabledForGitHubApps": false,
           "category": "interactions",
           "subcategory": "user"
+        }
+      }
+    },
+    "/user/issue-types": {
+      "get": {
+        "summary": "List issue types",
+        "description": "Lists all issue types for the authenticated user. OAuth app tokens and personal access tokens (classic) need the `read:user` scope to use this endpoint.",
+        "tags": [
+          "users"
+        ],
+        "operationId": "users/list-issue-types-for-authenticated-user",
+        "externalDocs": {
+          "description": "API method documentation",
+          "url": "https://docs.github.com/rest/users/issue-types#list-issue-types"
+        },
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/issue-type"
+                  }
+                },
+                "examples": {
+                  "default": {
+                    "$ref": "#/components/examples/issue-type-items"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          }
+        },
+        "x-github": {
+          "githubCloudOnly": false,
+          "enabledForGitHubApps": false,
+          "category": "users",
+          "subcategory": "issue-types"
+        }
+      },
+      "post": {
+        "summary": "Create an issue type",
+        "description": "Creates a new issue type for the authenticated user's personal account.\n\nOAuth app tokens and personal access tokens (classic) need the `user` scope to use this endpoint.",
+        "tags": [
+          "users"
+        ],
+        "operationId": "users/create-issue-type-for-authenticated-user",
+        "externalDocs": {
+          "description": "API method documentation",
+          "url": "https://docs.github.com/rest/users/issue-types#create-an-issue-type"
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/issue-type-request"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "name": "Epic",
+                    "description": "An issue type for a multi-week tracking of work",
+                    "is_enabled": true,
+                    "color": "green"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/issue-type"
+                },
+                "examples": {
+                  "default": {
+                    "$ref": "#/components/examples/issue-type"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "422": {
+            "$ref": "#/components/responses/validation_failed_simple"
+          }
+        },
+        "x-github": {
+          "githubCloudOnly": false,
+          "enabledForGitHubApps": false,
+          "category": "users",
+          "subcategory": "issue-types"
+        }
+      }
+    },
+    "/user/issue-types/{issue_type_id}": {
+      "put": {
+        "summary": "Update an issue type",
+        "description": "Updates an issue type for the authenticated user.\n\nThe authenticated user must own the issue type. OAuth app tokens and personal access tokens (classic)\nneed the `user` scope to use this endpoint.",
+        "tags": [
+          "users"
+        ],
+        "operationId": "users/update-issue-type-for-authenticated-user",
+        "externalDocs": {
+          "description": "API method documentation",
+          "url": "https://docs.github.com/rest/users/issue-types#update-an-issue-type"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/issue-type-id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/issue-type-request"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "name": "Epic",
+                    "description": "An issue type for a multi-week tracking of work",
+                    "is_enabled": true,
+                    "color": "green"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/issue-type"
+                },
+                "examples": {
+                  "default": {
+                    "$ref": "#/components/examples/issue-type"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "422": {
+            "$ref": "#/components/responses/validation_failed_simple"
+          }
+        },
+        "x-github": {
+          "githubCloudOnly": false,
+          "enabledForGitHubApps": false,
+          "category": "users",
+          "subcategory": "issue-types"
+        }
+      },
+      "delete": {
+        "summary": "Delete an issue type",
+        "description": "Deletes an issue type for the authenticated user.\n\nThe authenticated user must own the issue type. OAuth app tokens and personal access tokens (classic)\nneed the `user` scope to use this endpoint.",
+        "tags": [
+          "users"
+        ],
+        "operationId": "users/delete-issue-type-for-authenticated-user",
+        "externalDocs": {
+          "description": "API method documentation",
+          "url": "https://docs.github.com/rest/users/issue-types#delete-an-issue-type"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/issue-type-id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Response"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "422": {
+            "$ref": "#/components/responses/validation_failed_simple"
+          }
+        },
+        "x-github": {
+          "githubCloudOnly": false,
+          "enabledForGitHubApps": false,
+          "category": "users",
+          "subcategory": "issue-types"
         }
       }
     },
@@ -154650,7 +154856,7 @@
           }
         }
       },
-      "organization-create-issue-type": {
+      "issue-type-request": {
         "type": "object",
         "properties": {
           "name": {
@@ -154658,49 +154864,7 @@
             "type": "string"
           },
           "is_enabled": {
-            "description": "Whether or not the issue type is enabled at the organization level.",
-            "type": "boolean"
-          },
-          "description": {
-            "description": "Description of the issue type.",
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "color": {
-            "description": "Color for the issue type.",
-            "type": [
-              "string",
-              "null"
-            ],
-            "enum": [
-              "gray",
-              "blue",
-              "green",
-              "yellow",
-              "orange",
-              "red",
-              "pink",
-              "purple",
-              null
-            ]
-          }
-        },
-        "required": [
-          "name",
-          "is_enabled"
-        ]
-      },
-      "organization-update-issue-type": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "Name of the issue type.",
-            "type": "string"
-          },
-          "is_enabled": {
-            "description": "Whether or not the issue type is enabled at the organization level.",
+            "description": "Whether or not the issue type is enabled.",
             "type": "boolean"
           },
           "description": {
@@ -168256,6 +168420,71 @@
         "minProperties": 1,
         "additionalProperties": false
       },
+      "pull-requests-on-alerts": {
+        "title": "Pull Requests on Alerts",
+        "description": "A pull request linked to a code scanning alert.",
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "integer",
+            "description": "The number of the linked pull request."
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The ID of the linked pull request."
+          },
+          "repository": {
+            "$ref": "#/components/schemas/simple-repository"
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the linked pull request."
+          },
+          "state": {
+            "type": "string",
+            "description": "The state of the referenced pull request.",
+            "enum": [
+              "open",
+              "closed",
+              "merged"
+            ]
+          },
+          "merged_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "The time the linked pull request was merged. Null if it has not been merged."
+          },
+          "html_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "The URL of the linked pull request on GitHub."
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "The REST API URL for the linked pull request."
+          },
+          "draft": {
+            "type": "boolean",
+            "description": "Whether the linked pull request is a draft."
+          }
+        },
+        "required": [
+          "number",
+          "id",
+          "repository",
+          "title",
+          "state",
+          "merged_at",
+          "html_url",
+          "url",
+          "draft"
+        ]
+      },
       "code-scanning-alert-linked-issue": {
         "description": "A GitHub issue linked to a code scanning alert. The issue may belong to a different repository.",
         "type": "object",
@@ -168368,6 +168597,20 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/simple-user"
+            }
+          },
+          "linked_pull_requests": {
+            "description": "Pull requests linked to this alert.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/pull-requests-on-alerts"
+            }
+          },
+          "linked_issues": {
+            "description": "Issues linked to this alert.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/code-scanning-alert-linked-issue"
             }
           }
         },
@@ -168538,6 +168781,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/pull-request-simple"
+            }
+          },
+          "linked_issues": {
+            "description": "Issues linked to this alert.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/code-scanning-alert-linked-issue"
             }
           }
         },
@@ -367481,7 +367731,7 @@
                 "login": "Nick3C",
                 "id": 90254,
                 "node_id": "MDQ6VXNlcjkwMjU0",
-                "avatar_url": "https://secure.gravatar.com/avatar/934442aadfe3b2f4630510de416c5718?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png",
+                "avatar_url": "https://avatars.githubusercontent.com/u/90254?v=4",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/Nick3C",
                 "html_url": "https://github.com/Nick3C",
@@ -367549,7 +367799,7 @@
               "updated_at": "2009-07-19T09:23:43Z",
               "closed_at": null,
               "pull_request": {
-                "url": "https://api/github.com/repos/octocat/Hello-World/pull/1347",
+                "url": "https://api.github.com/repos/octocat/Hello-World/pull/1347",
                 "html_url": "https://github.com/octocat/Hello-World/pull/1347",
                 "diff_url": "https://github.com/octocat/Hello-World/pull/1347.diff",
                 "patch_url": "https://api.github.com/repos/octocat/Hello-World/pulls/1347"
